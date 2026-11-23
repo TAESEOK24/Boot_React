@@ -23,7 +23,8 @@ const ListComponent = () => {
     page,
     size,
     moveToRead,
-    moveToList
+    moveToList,
+    refresh
   }: UseCustomMoveReturn = useCustomMove()
 
   const [serverData, setServerData] =
@@ -34,7 +35,7 @@ const ListComponent = () => {
       console.log(data)
       setServerData(data)
     })
-  }, [page, size])
+  }, [page, size, refresh])
 
   return (
     <div className="border-2 border-blue-100 mt-10 m-2">

@@ -1,9 +1,17 @@
-import { createSearchParams, useNavigate, useSearchParams } from "react-router"
-import { useCallback } from "react"
+
+import { useCallback, useState } from "react"
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams
+} from "react-router"
 
 const useCustomMove = (): UseCustomMoveReturn => {
   const navigate = useNavigate()
   const [queryParams] = useSearchParams()
+
+  // refresh 상태 추가
+  const [refresh, setRefresh] = useState<boolean>(false)
 
   const pageStr = queryParams.get("page")
   const sizeStr = queryParams.get("size")
@@ -17,7 +25,7 @@ const useCustomMove = (): UseCustomMoveReturn => {
   }).toString()
 
   const moveToList = (pageParam?: PageParam) => {
-    let queryStr = queryDefault
+    let queryStr = ""
 
     if (pageParam) {
       const pageNum = Number(pageParam.page) || 1
@@ -25,30 +33,43 @@ const useCustomMove = (): UseCustomMoveReturn => {
 
       queryStr = createSearchParams({
         page: String(pageNum),
-        size: String(sizeNum),  
+        size: String(sizeNum),
       }).toString()
+
+      // 동일한 페이지를 다시 클릭할 경우
+      if (queryStr === queryDefault) {
+        setRefresh(prev => !prev)
+      }
+    } else {
+      queryStr = queryDefault
     }
 
-    navigate({ pathname: "../list", search: queryStr })
+    navigate({
+      pathname: "../list",
+      search: queryStr
+    })
   }
 
   const moveToModify = useCallback(
-  (tno: number) => {
-    navigate({
-      pathname: `../modify/${tno}`,
-      search: queryDefault,
-    })
-  },
-  [navigate, queryDefault],
-)
+    (tno: number) => {
+      navigate({
+        pathname: `../modify/${tno}`,
+        search: queryDefault,
+      })
+    },
+    [navigate, queryDefault]
+  )
 
-const moveToRead = (tno: number) => {
-  navigate({
-    pathname: `../read/${tno}`,
-    search: queryDefault,
-  })
+    const moveToRead = (num:number) => {
+console.log(queryDefault)
+navigate({
+pathname: `../read/${num}`,
+search: queryDefault
+})
 }
 
-return { page, size, moveToList, moveToModify, moveToRead }
+return {moveToList, moveToModify, moveToRead, page, size, refresh} //moveToRead added
+
 }
+
 export default useCustomMove

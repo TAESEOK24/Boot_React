@@ -9,6 +9,8 @@ interface UseCustomMoveReturn {
   size: number
   moveToModify: (tno: number) => void
     moveToRead: (tno: number) => void
+
+    refresh: boolean
 }
 
 interface PageRequestDTO {
@@ -34,4 +36,17 @@ pageRequestDTO : PageRequestDTO | null // Assuming it's an object or null
 // Next page number
 // Total number of pages
 current: number // Current page number
+}
+
+interface ResultModal{
+title:string,
+content: string,
+callbackFn? : () =>void 
+}
+
+interface TodoModify {
+tno: number,
+title: string,
+dueDate: string | null
+complete: boolean
 }
