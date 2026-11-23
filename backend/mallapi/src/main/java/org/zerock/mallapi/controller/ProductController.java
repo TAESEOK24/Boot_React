@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -69,6 +70,7 @@ public class ProductController {
     }
 
     // 상품 목록 조회
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')") //임시로 권한 설정
     @GetMapping("/list")
     public PageResponseDTO<ProductDTO> list(
             PageRequestDTO pageRequestDTO) {
